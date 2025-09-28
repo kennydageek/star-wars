@@ -1,7 +1,7 @@
 import * as ENDPOINTS from '../endpoints';
 
-export const getStarships = async () => {
-  const response = await fetch(ENDPOINTS.FETCH_STARSHIPS, {
+export const getStarships = async (url: string | null) => {
+  const response = await fetch(url || ENDPOINTS.FETCH_STARSHIPS, {
     method: 'GET',
     headers: {},
   });

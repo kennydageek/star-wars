@@ -14,7 +14,6 @@ interface Data {
 const StarshipDetails = () => {
   const { id } = useParams();
   const [data, setData] = useState<Data | null>(null);
-  console.log(id);
 
   const fetchStarshipsById = async (id: string) => {
     const data = await getStarshipsById(id);

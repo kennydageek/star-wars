@@ -126,10 +126,7 @@ const LoginForm = () => {
     if (isFormValid) {
       navigate('/overview');
     } else {
-      console.log('Validation failed - current errors:', {
-        email: emailError,
-        password: passwordErrors,
-      });
+      console.log('error');
     }
   };
 

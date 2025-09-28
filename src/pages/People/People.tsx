@@ -6,9 +6,9 @@ import { getIdFromUrl } from '../../utils/getIdFromUrl';
 
 interface People {
   name: string;
-  birthYear: string;
+  birth_year: string;
   gender: string;
-  hairColor: string;
+  hair_color: string;
   height: string;
   created: string;
   url: string;
@@ -35,22 +35,64 @@ const columns: Column<People>[] = [
 ];
 
 export const People = () => {
-  const [data, setData] = useState([]);
+  const [peopleData, setPeopleData] = useState({
+    results: [],
+    count: 0,
+    next: null,
+    previous: null,
+    currentPage: 1,
+  });
   const [loading, setLoading] = useState(false);
 
-  const fetchPeople = async () => {
+  // Helper function to determine current page from SWAPI URLs
+  const getCurrentPage = (
+    next: string | null,
+    previous: string | null
+  ): number => {
+    if (previous) {
+      const urlParams = new URLSearchParams(previous.split('?')[1]);
+      return parseInt(urlParams.get('page') || '1') + 1;
+    }
+    return 1;
+  };
+
+  // Fetch people with optional page URL
+  const fetchPeople = async (pageUrl: string | null = null) => {
     setLoading(true);
-    const data = await getPeople();
-    setData(data.results);
-    setLoading(false);
+    try {
+      const data = await getPeople(pageUrl);
+      setPeopleData({
+        results: data.results,
+        count: data.count,
+        next: data.next,
+        previous: data.previous,
+        currentPage: getCurrentPage(data.next, data.previous),
+      });
+    } catch (error) {
+      console.error('Error fetching people:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchPeople();
   }, []);
 
-  const handleSelectionChange = (e: People[]) => {
-    console.log(e);
+  // Calculate total pages (SWAPI returns 10 items per page)
+  const totalPages = Math.ceil(peopleData.count / 10);
+
+  // Pagination handlers
+  const handleNext = () => {
+    if (peopleData.next) {
+      fetchPeople(peopleData.next);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (peopleData.previous) {
+      fetchPeople(peopleData.previous);
+    }
   };
 
   const getRowLink = (people: People) => `/people/${getIdFromUrl(people.url)}`;
@@ -60,14 +102,23 @@ export const People = () => {
       <div className="">
         <p className="text-[#A4A7B7]">People</p>
 
-        <div className="mt-6 max-lg:w-[300px]">
+        <div className="mt-6 max-lg:max-w-[calc(100lvw-80px)]">
           <Table
             columns={columns}
-            data={data}
-            onSelectionChange={handleSelectionChange}
+            data={peopleData.results}
             loading={loading}
             loadingText="Loading people..."
             getRowLink={getRowLink}
+            // Add pagination props
+            pagination={{
+              currentPage: peopleData.currentPage,
+              totalPages: totalPages,
+              onNext: handleNext,
+              onPrevious: handlePrevious,
+              hasNext: !!peopleData.next,
+              hasPrevious: !!peopleData.previous,
+              totalCount: peopleData.count,
+            }}
           />
         </div>
       </div>

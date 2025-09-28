@@ -1,7 +1,7 @@
 import * as ENDPOINTS from '../endpoints';
 
-export const getFilms = async () => {
-  const response = await fetch(ENDPOINTS.FETCH_FILMS, {
+export const getFilms = async (url: string | null) => {
+  const response = await fetch(url || ENDPOINTS.FETCH_FILMS, {
     method: 'GET',
     headers: {},
   });

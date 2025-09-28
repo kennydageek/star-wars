@@ -15,11 +15,10 @@ interface Data {
 const PeopleDetails = () => {
   const { id } = useParams();
   const [data, setData] = useState<Data | null>();
-  console.log(id);
 
   const fetchPeopleById = async (id: string) => {
     const data = await getPeopleById(id);
-    console.log(data);
+
     setData(data);
   };
 

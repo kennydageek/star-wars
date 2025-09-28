@@ -47,7 +47,7 @@ const TopNav = () => {
           id ? 'justify-between' : 'justify-end'
         } `}
       >
-        <div className="ml-6 self-center">
+        <div className="ml-6 lg:ml-[272px] self-center">
           <BackButton showCondition={id ? true : false} />
         </div>
         <div className="flex lg:gap-7">

@@ -13,8 +13,17 @@ interface TableProps<T> {
   data: T[];
   onSelectionChange?: (selectedRows: T[]) => void;
   getRowLink: (row: T, rowIndex: number) => string;
-  loading?: boolean; // Add loading prop
-  loadingText?: string; // Optional custom loading text
+  loading?: boolean;
+  loadingText?: string;
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+    onNext: () => void;
+    onPrevious: () => void;
+    hasNext: boolean;
+    hasPrevious: boolean;
+    totalCount: number;
+  };
 }
 
 function Table<T extends Record<string, React.ReactNode>>({
@@ -22,13 +31,13 @@ function Table<T extends Record<string, React.ReactNode>>({
   data,
   onSelectionChange,
   getRowLink,
-  loading = false, // Default to false
-  loadingText = 'Loading data...', // Default loading text
+  loading = false,
+  loadingText = 'Loading data...',
+  pagination,
 }: TableProps<T>) {
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [isAllSelected, setIsAllSelected] = useState(false);
   const isRowClickable = !!getRowLink;
-
   const navigate = useNavigate();
 
   const handleNavigate = (row: T, rowIndex: number) => {
@@ -84,9 +93,9 @@ function Table<T extends Record<string, React.ReactNode>>({
         <div className="flex items-center">
           <input
             type="checkbox"
-            checked={isAllSelected && !loading} // Disable visual when loading
-            disabled={loading} // Actually disable when loading
-            onChange={(e) => !loading && handleSelectAll(e.target.checked)} // Prevent action when loading
+            checked={isAllSelected && !loading}
+            disabled={loading}
+            onChange={(e) => !loading && handleSelectAll(e.target.checked)}
             className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
@@ -107,6 +116,77 @@ function Table<T extends Record<string, React.ReactNode>>({
     },
     ...columns,
   ];
+
+  // Simple Pagination Component
+  const Pagination = () => {
+    if (!pagination) return null;
+
+    const {
+      currentPage,
+      totalPages,
+      onNext,
+      onPrevious,
+      hasNext,
+      hasPrevious,
+      totalCount,
+    } = pagination;
+
+    return (
+      <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
+        <div className="flex justify-between flex-1 sm:hidden">
+          <button
+            onClick={onPrevious}
+            disabled={!hasPrevious}
+            className={`px-4 py-2  text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 ${
+              !hasPrevious ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+            }`}
+          >
+            Previous
+          </button>
+          <button
+            onClick={onNext}
+            disabled={!hasNext}
+            className={`px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 ${
+              !hasNext ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer '
+            }`}
+          >
+            Next
+          </button>
+        </div>
+        <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm text-gray-700">
+              Page <span className="font-medium">{currentPage}</span> of{' '}
+              <span className="font-medium">{totalPages}</span> •{' '}
+              <span className="font-medium">{totalCount}</span> total items
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={onPrevious}
+              disabled={!hasPrevious}
+              className={`px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 ${
+                !hasPrevious
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'cursor-pointer'
+              }`}
+            >
+              Previous
+            </button>
+            <button
+              onClick={onNext}
+              disabled={!hasNext}
+              className={`px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 ${
+                !hasNext ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   // Loading state
   if (loading) {
@@ -225,6 +305,8 @@ function Table<T extends Record<string, React.ReactNode>>({
           })}
         </tbody>
       </table>
+
+      <Pagination />
     </div>
   );
 }
