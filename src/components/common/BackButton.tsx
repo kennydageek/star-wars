@@ -25,10 +25,10 @@ const BackButton: React.FC<BackButtonProps> = ({
   return (
     <button
       onClick={handleBack}
-      className={`bg-transparent border-none p-0 ${className}`}
+      className={`flex bg-transparent border-none p-0 ${className}`}
       type="button"
     >
-      <img src={BackIconDefault} className="w-[9px]" />
+      <img src={BackIconDefault} className="w-[9px] self-center" />
 
       <span className="text-[#A4A7B7] self-center">Back</span>
     </button>
