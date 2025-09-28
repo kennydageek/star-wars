@@ -9,7 +9,7 @@ const AuthLayout = () => {
         <img src={logo} className="w-[385px]" alt="logo" />
       </div>
 
-      <div className="flex justify-center lg:ml-[480px] items-center grow">
+      <div className="flex justify-center h-screen lg:ml-[480px] items-center grow">
         <Outlet />
       </div>
     </div>
