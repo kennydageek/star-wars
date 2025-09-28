@@ -195,7 +195,7 @@ const LoginForm = () => {
             Log in
           </Button>
         </div>
-        <Link className="text-[#0A74DC] text-center text-sm" to="/overview">
+        <Link className="text-[#0A74DC] text-center text-sm" to="/">
           Forgot your password?
         </Link>
       </div>
