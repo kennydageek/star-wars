@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import AuthLayout from '../layouts/AuthLayout';
 import PrivateLayout from '../layouts/PrivateLayout';
+import { Navigate } from 'react-router-dom';
 import Login from '../pages/Login';
 import Overview from '../pages/Overview/Overview';
 import Starship from '../pages/Starship/Starship';
@@ -19,6 +20,10 @@ const routes: RouteObject[] = [
     children: [
       {
         index: true, // default route
+        element: <Navigate to="/login" replace />,
+      },
+      {
+        path: 'login',
         element: <Login />,
       },
     ],
