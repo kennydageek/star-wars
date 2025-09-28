@@ -120,7 +120,7 @@ const Sidebar = () => {
           fixed lg:fixed
           w-[272px] h-full bg-[#031434] py-8 px-6
           transform transition-transform duration-300 ease-in-out z-40
-          ${isOpen || !isMobile ? 'translate-x-0' : '-translate-x-full'}
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         <img src={logo} className="w-[107px] mx-auto" alt="logo" />
