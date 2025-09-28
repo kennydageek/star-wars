@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import 'tailwindcss';
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+input[type='checkbox'] {
+  accent-color: #0a74dc; /* your brand color */
+}
+
+.password-asterisk {
+  font-family: 'AsteriskFont', monospace;
+  letter-spacing: 1px;
+}
+
+/* Fallback for browsers that don't support the asterisk trick */
+.password-asterisk {
+  -webkit-text-security: disc; /* Default dots */
+}
+
+@supports (font-family: 'AsteriskFont') {
+  .password-asterisk {
+    -webkit-text-security: none;
+    font-family: 'AsteriskFont', monospace;
+  }
+}
