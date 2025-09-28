@@ -12,7 +12,7 @@ const LoginForm = () => {
 
   const [errors, setErrors] = useState({
     email: '',
-    password: '',
+    password: [] as string[], // Change to array for multiple errors
   });
 
   const [touched, setTouched] = useState({
@@ -32,19 +32,26 @@ const LoginForm = () => {
     return '';
   };
 
-  const validatePassword = (password: string): string => {
-    if (!password) return 'Password is required';
+  const validatePassword = (password: string): string[] => {
+    const passwordErrors: string[] = [];
 
-    if (password.length < 8) return 'Password must be at least 8 characters';
+    if (!password) {
+      passwordErrors.push('Password is required');
+      return passwordErrors; // Return early if no password
+    }
+
+    if (password.length < 8) {
+      passwordErrors.push('Password must be at least 8 characters');
+    }
 
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
 
     if (!hasLetter || !hasNumber) {
-      return 'Password must contain both letters and numbers';
+      passwordErrors.push('Password must contain both letters and numbers');
     }
 
-    return '';
+    return passwordErrors;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,10 +63,17 @@ const LoginForm = () => {
 
     // Clear error when user starts typing
     if (errors[id as keyof typeof errors]) {
-      setErrors((prev) => ({
-        ...prev,
-        [id]: '',
-      }));
+      if (id === 'password') {
+        setErrors((prev) => ({
+          ...prev,
+          [id]: [],
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          [id]: '',
+        }));
+      }
     }
   };
 
@@ -72,17 +86,19 @@ const LoginForm = () => {
     }));
 
     // Validate field on blur
-    let error = '';
     if (id === 'email') {
-      error = validateEmail(value);
+      const error = validateEmail(value);
+      setErrors((prev) => ({
+        ...prev,
+        [id]: error,
+      }));
     } else if (id === 'password') {
-      error = validatePassword(value);
+      const passwordErrors = validatePassword(value);
+      setErrors((prev) => ({
+        ...prev,
+        [id]: passwordErrors,
+      }));
     }
-
-    setErrors((prev) => ({
-      ...prev,
-      [id]: error,
-    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -96,47 +112,47 @@ const LoginForm = () => {
 
     // Get validation results
     const emailError = validateEmail(formData.email);
-    const passwordError = validatePassword(formData.password);
+    const passwordErrors = validatePassword(formData.password);
 
     // Update errors state
     setErrors({
       email: emailError,
-      password: passwordError,
+      password: passwordErrors,
     });
 
-    // Check if form is valid using the direct results
-    const isFormValid = !emailError && !passwordError;
+    // Check if form is valid
+    const isFormValid = !emailError && passwordErrors.length === 0;
 
     if (isFormValid) {
-      console.log('Login successful:', formData);
-      // Redirect to dashboard on successful validation
       navigate('/overview');
     } else {
       console.log('Validation failed - current errors:', {
         email: emailError,
-        password: passwordError,
+        password: passwordErrors,
       });
-      console.log('Form data:', formData);
     }
   };
 
   // Helper to determine if button should be disabled
   const isFormValid = () => {
     return (
-      formData.email && formData.password && !errors.email && !errors.password
+      formData.email &&
+      formData.password &&
+      !errors.email &&
+      errors.password.length === 0
     );
   };
 
   return (
     <form
-      className="border flex flex-col gap-12 border-[#A4A7B74D] rounded-lg py-[74px] px-[132px]"
+      className="lg:border max-lg:w-full flex flex-col gap-12 border-[#A4A7B74D] rounded-lg py-[74px] px-10 md:px-[132px]"
       onSubmit={handleSubmit}
     >
       <FormHeader title="Login">
         <p className="text-[#737373]">Kindly enter your details to log in </p>
       </FormHeader>
 
-      <div className="w-[335px] flex flex-col gap-5">
+      <div className="w-full lg:w-[335px] flex flex-col gap-5">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-2">
             <Input
@@ -163,15 +179,20 @@ const LoginForm = () => {
               value={formData.password}
               onChange={handleChange}
               onBlur={handleBlur}
-              hasError={touched.password && !!errors.password}
+              hasError={touched.password && errors.password.length > 0}
             />
-            {touched.password && errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+            {touched.password && errors.password.length > 0 && (
+              <div className="mt-1">
+                {errors.password.map((error, index) => (
+                  <p key={index} className="text-red-500 text-xs">
+                    • {error}
+                  </p>
+                ))}
+              </div>
             )}
           </div>
 
           <Button
-            disabled={!isFormValid()}
             className={!isFormValid() ? 'opacity-50 cursor-not-allowed' : ''}
           >
             Log in

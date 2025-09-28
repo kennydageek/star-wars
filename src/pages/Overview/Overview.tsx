@@ -81,7 +81,7 @@ export const Overview = () => {
   const getRowLink = (film: Film) => `/overview/${getIdFromUrl(film.url)}`;
   return (
     <>
-      <div className="flex gap-12">
+      <div className="flex flex-col lg:flex-row gap-3 lg:gap-12">
         {cardItems.map((item) => (
           <Cards key={item.title} item={item} />
         ))}
@@ -90,7 +90,7 @@ export const Overview = () => {
       <div className="mt-[75px]">
         <p className="text-[#A4A7B7]">Films</p>
 
-        <div className="mt-6">
+        <div className="mt-6 max-lg:w-[300px]">
           <Table
             columns={columns}
             data={filmData}

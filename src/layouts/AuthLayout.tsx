@@ -5,11 +5,11 @@ import logo from '@/assets/icons/logo.svg';
 const AuthLayout = () => {
   return (
     <div className="flex">
-      <div className="w-[480px] flex bg-[#031434] h-screen justify-center items-center">
+      <div className="w-[480px] hidden lg:flex bg-[#031434] fixed h-screen justify-center items-center">
         <img src={logo} className="w-[385px]" alt="logo" />
       </div>
 
-      <div className="flex justify-center items-center grow">
+      <div className="flex justify-center lg:ml-[480px] items-center grow">
         <Outlet />
       </div>
     </div>

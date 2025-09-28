@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Spinner from './Spinner';
 
 export interface Column<T> {
@@ -28,6 +28,13 @@ function Table<T extends Record<string, React.ReactNode>>({
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [isAllSelected, setIsAllSelected] = useState(false);
   const isRowClickable = !!getRowLink;
+
+  const navigate = useNavigate();
+
+  const handleNavigate = (row: T, rowIndex: number) => {
+    const rowLink = getRowLink(row, rowIndex);
+    navigate(rowLink);
+  };
 
   // Handle header checkbox change
   const handleSelectAll = (checked: boolean) => {
@@ -179,8 +186,6 @@ function Table<T extends Record<string, React.ReactNode>>({
         </thead>
         <tbody className="divide-y divide-gray-100">
           {data.map((row, rowIndex) => {
-            const rowLink = getRowLink(row, rowIndex);
-
             return (
               <tr
                 key={rowIndex}
@@ -200,14 +205,14 @@ function Table<T extends Record<string, React.ReactNode>>({
                     {col.key === 'selection' ? (
                       col.render?.(row, rowIndex)
                     ) : isRowClickable ? (
-                      <Link
-                        to={rowLink}
-                        className="block w-full h-full no-underline text-inherit"
+                      <span
+                        onClick={() => handleNavigate(row, rowIndex)}
+                        className="block w-full h-full  no-underline text-inherit"
                       >
                         {col.render
                           ? col.render(row, rowIndex)
                           : (row[col.key] as React.ReactNode)}
-                      </Link>
+                      </span>
                     ) : col.render ? (
                       col.render(row, rowIndex)
                     ) : (

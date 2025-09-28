@@ -8,9 +8,9 @@ const PrivateLayout = () => {
     <div className="flex">
       <Sidebar />
 
-      <div className="flex flex-col   ml-[272px] grow">
+      <div className="flex flex-col  grow">
         <TopNav />
-        <div className="px-10 py-[44px] h-full">
+        <div className="px-10 py-[20px] lg:ml-[272px] lg:py-[44px] mt-20 h-full">
           <Outlet />
         </div>
       </div>

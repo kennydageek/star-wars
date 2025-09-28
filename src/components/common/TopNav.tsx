@@ -41,41 +41,45 @@ const TopNav = () => {
   };
 
   return (
-    <div
-      className={`py-5 shadow shadow-[#E5E5E54D] px-10 flex ${
-        id ? 'justify-between' : 'justify-end'
-      } relative`}
-    >
-      <BackButton showCondition={id ? true : false} />
-      <div className="flex gap-7">
-        <img src={Bell} alt="Notifications" />
+    <div className="w-full">
+      <div
+        className={`py-5 shadow w-full fixed  shadow-[#E5E5E54D] z-10 bg-white px-10 flex ${
+          id ? 'justify-between' : 'justify-end'
+        } `}
+      >
+        <div className="ml-6 self-center">
+          <BackButton showCondition={id ? true : false} />
+        </div>
+        <div className="flex lg:gap-7">
+          <img src={Bell} alt="Notifications" />
 
-        <div className="flex gap-20 self-center border-l border-[#E5E5E5] pl-10">
-          <div className="flex gap-5">
-            <img src={Account} alt="User account" />
-            <p className="self-center text-[15px] text-[#303B54]">John Doe</p>
-          </div>
+          <div className="flex gap-4 lg:gap-20 self-center border-l border-[#E5E5E5]  pl-4 lg:pl-10">
+            <div className="flex gap-5">
+              <img src={Account} alt="User account" />
+              <p className="self-center text-[15px] text-[#303B54]">John Doe</p>
+            </div>
 
-          {/* Three dots with dropdown */}
-          <div className="relative self-center" ref={dropdownRef}>
-            <img
-              src={ThreeDots}
-              alt="More options"
-              className="cursor-pointer"
-              onClick={toggleDropdown}
-            />
+            {/* Three dots with dropdown */}
+            <div className="relative self-center" ref={dropdownRef}>
+              <img
+                src={ThreeDots}
+                alt="More options"
+                className="cursor-pointer"
+                onClick={toggleDropdown}
+              />
 
-            {/* Dropdown menu */}
-            {isDropdownOpen && (
-              <div className="absolute right-0 top-5 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50">
-                <button
-                  onClick={handleLogout}
-                  className="cursor-pointer block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 text-lg transition-colors duration-200"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+              {/* Dropdown menu */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 top-5 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50">
+                  <button
+                    onClick={handleLogout}
+                    className="cursor-pointer block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 text-lg transition-colors duration-200"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -6,8 +6,8 @@ interface itemProps {
 
 const DetailsPage: React.FC<itemProps> = ({ image, title, children }) => {
   return (
-    <div className="flex gap-10">
-      <div className="w-[318px] h-[450px]">
+    <div className="flex flex-col gap-5 lg:gap-10">
+      <div className="lg:w-[318px] h-[450px]">
         <img src={image} alt="" className="w-full h-full object-cover" />
       </div>
 

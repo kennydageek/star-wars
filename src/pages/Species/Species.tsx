@@ -89,7 +89,7 @@ export const Species = () => {
       <div className="">
         <p className="text-[#A4A7B7]">Species</p>
 
-        <div className="mt-6">
+        <div className="mt-6 max-lg:w-[300px]">
           <Table
             columns={columns}
             data={data}

@@ -1,15 +1,11 @@
 interface ItemProp {
   children: React.ReactNode;
-  disabled: boolean;
   className?: string;
 }
 
-const Button = ({ disabled, children }: ItemProp) => {
+const Button = ({ children }: ItemProp) => {
   return (
-    <button
-      className="bg-[#0A74DC] cursor-pointer rounded-md py-3 font-medium text-white"
-      disabled={disabled}
-    >
+    <button className="bg-[#0A74DC] cursor-pointer rounded-md py-3 font-medium text-white">
       {children}
     </button>
   );
